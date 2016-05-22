@@ -1,13 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-int cl(int i){
+void cl(void){
 		system("clear");
-	return 0;
 }
-
-int e_xit(int i){
-	return 0;}
 
 int main(void){
 	
@@ -22,18 +18,18 @@ start:
 
 	i = strcmp (Input, clear);
 	if (i == 0)
-	{cl(1); goto start;}
+	{cl(); goto start;}
 
 	else { 
 	
 	i = strcmp (Input, end);
 	if (i == 0)
-		e_xit(1);
+		goto end;
 	else{
 		printf ("error\n");
 	  	goto start;
 	}}
 
-
+end:
 	return 0;
 }
