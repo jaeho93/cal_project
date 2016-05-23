@@ -1,9 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-void cl(void){
-		system("clear");
-}
+
+void cl(void);
 
 int main(void){
 	
@@ -13,6 +12,7 @@ int main(void){
 	char end[60] = "end";
 
 start:
+
 	printf("(input) ");
 	scanf("%s", Input);
 
@@ -24,12 +24,14 @@ start:
 	
 	i = strcmp (Input, end);
 	if (i == 0)
-		goto end;
+		exit(1);
 	else{
 		printf ("error\n");
 	  	goto start;
 	}}
 
-end:
 	return 0;
+}
+void cl(void){
+		system("clear");
 }
