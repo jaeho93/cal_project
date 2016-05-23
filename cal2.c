@@ -28,7 +28,7 @@ int main(void){
 	t = str_b -1;
 				
 	int shift;
-	if(str_a >= str_b){
+	if(str_a > str_b){
 		shift = str_a - str_b;
 		
 		for( ; t>=0; t--) // 길이가 짧은 배열 위치 재조정
@@ -38,23 +38,19 @@ int main(void){
 				b[shift-1] = '0'; 
 
 		for(; i >= 0; i--){
-			c[i] += (a[i]+b[i]); 
+			c[i+1] += ((a[i]+b[i])); 
 			
-			if(c[i] >= 10)
-			{
-				c[i-1] += 1;
-				c[i] = c[i]-10;	
+			if(c[i+1] >= 10)
+			{ 
+				c[i]++;
+				c[i+1] -= (96+10);
+
 			}   
 		}
-		
-}
-for(i=0;i<=str_a-1;i++){
-	printf("%d",c[i]-87);
-}	
-
-printf("%d", atoi(c));
-		
+	}
+	for(int j=0; j <= str_a; j++)
+		printf("%d",c[j]);
 		
 	return 0;
-}
 
+}
