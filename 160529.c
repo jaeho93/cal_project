@@ -38,10 +38,6 @@ start:
 	
 	
 	scanf("%s", in3);
-	printf("값1 값2 값3\n");
-	printf("%s\n", in1);
-	printf("%s\n", in2);
-	printf("%s\n", in3);
 
 	switch (in2[0]) {
 	
@@ -71,11 +67,6 @@ start:
 	for(int i = 0; i <= 8; temp3_d++, i++)
 	in3_s[i] = in3[temp3_d];
 	}
-	printf("정수 정수 소수 소수\n");
-	printf("%s\n", in1_j);
-	printf("%s\n", in3_j);
-	printf("%s\n", in1_s);
-	printf("%s\n", in3_s);
 
 	last = strlen(in1_j) - 1;		// 첫번째 정수 배열 뒤집기1
 	while(1) {
@@ -87,8 +78,6 @@ start:
 			 }
 	first = 0; last = 0;
 
-	printf("정쉬디집\n");
-	printf("%s\n", in1_j);
 	/*last = strlen(in1_s) - 1;		// 첫번째 소수 배열 뒤집기1
 	while(1) {
 	if(first > last) break;
@@ -107,7 +96,6 @@ start:
 	first++, last--;
 			 }
 	first = 0; last = 0;
-	printf("%s\n", in3_j);
 
 	/*last = strlen(in3_s) - 1;		// 두번째 소수 배열 뒤집기1
 	while(1) {
