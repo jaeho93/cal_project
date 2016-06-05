@@ -15,15 +15,20 @@ char res_j[51] = {};
 char res_s[10] = {};
 int div_j[51] = {};
 
+char var[10] = {};					// 여기는 변수 저장용으로 초기화 하지 않는다.
+char var_var[10][61] = {};
+int var_num = 0;
+
 char c_lear[N] = "clear";
 char e_nd[N] = "end";
+char V_AR[N] = "VAR";
 
 int str_in1, str_in2, str_in3, str_res_s;
 int temp = 0, temp1_d = 0, temp3_d = 0, res_d = 0, temp_j = 0, temp_s = 0;
 int first = 0, last = 0;
-int k = 0, p = 0, q = 0, daeso = 0, choice = 0;
+int k = 0, p = 0, q = 0, daeso = 0, choice = 0, chosen;
 
-//void choice(); // 명령 선택 (아직 구현 x)
+void c_hoice();		 // 명령 선택 (아직 구현 x)
 void separate(); 			// 정수부 소수부 분리
 void invert1();   			// 계산 전 배열 뒤집기
 void invert2();				// 계산 후 배열 뒤집기
@@ -38,10 +43,10 @@ void minus_div();			// 나누기용 마이너스
 void mutiply();
 void divide();
 void remain();
-void end();
-void VAR();
 void initialization();
 void comma(char n[]);
+void VAR();
+void var_in();
 
 int main() {
 
@@ -52,13 +57,10 @@ start:
 	
 	scanf("%s", in1);
 	str_in1 = strlen(in1);
-																// strcmp  오류
-	choice = strcmp (in1, c_lear);
-	if (choice == 0) {system("clear"); initialization(); goto start;}
-	else{
-	choice = strcmp (in1, e_nd);
-	if (choice == 0) exit(1);}
-		
+																
+	c_hoice();
+
+	if (chosen != 1){
 
 	scanf("%s", in2);
 	str_in2 = strlen(in2);
@@ -77,7 +79,7 @@ start:
 	case '%' : { invert1(); compare(); convert1(); remain(); convert2(); invert2(); break; }
 
 	default: ;
-									}
+									}	
 
 	printf("= ");
 	if (daeso == 1)
@@ -85,7 +87,9 @@ start:
 	comma(res_j);
 	if (p != 0)
 	{printf(".");
-	comma(res_s);}
+	comma(res_s);}					
+
+	}
 
     initialization();
 
@@ -93,6 +97,22 @@ start:
 
 	return 0;
 }
+
+void c_hoice(){
+
+	var_in(); if (chosen == 1) return ;
+	
+	choice = strcmp (in1, c_lear);
+	if (choice == 0) {system("clear"); chosen = 1; return ;}
+	else { choice = strcmp (in1, e_nd); 
+	if (choice == 0) exit(1);
+	else { choice = strcmp (in1, V_AR);
+	if (choice == 0) {VAR(); chosen = 1; return ;}
+	}}
+
+} // choice 함수
+
+
 
 void separate(){		// 정수부 소수부 분리하는 함수
 
@@ -415,7 +435,7 @@ res_s[i] = 0;
 str_in1 = 0, str_in2 = 0, str_in3 = 0, str_res_s = 0;
 temp = 0, temp1_d = 0, temp3_d = 0, temp_j = 0, temp_s = 0;
 first = 0, last = 0;
-k = 0, p = 0, q = 0, daeso = 0, choice = 0;
+k = 0, p = 0, q = 0, daeso = 0, choice = 0, chosen = 0;
 
 } // 초기화 함수
 
@@ -431,9 +451,36 @@ void comma(char n[]){
 
 } // comma 함수
 
+void VAR(){
 
+	for (int i = 0; var[i] != 0; i++)
+	printf("%c = %s\n", var[i], var_var[i]);
+	return ;
 
+} // VAR 함수
 
+void var_in(){
+
+	if (str_in1 == 1) 						{
+	if (in1[0] >= 'A' && in1[0] <= 'Z')		{
+	scanf("%s", in2); 
+	if (in2[0] == '=')  {
+	var[var_num] = in1[0];
+	scanf("%s", var_var[var_num]);				// 콤마 찍기 구현 안됨
+	printf("= %s\n", var_var[var_num]);
+	var_num++; chosen = 1;
+	return ;			}					}
+	
+	else if (in1[0] >= 'a' && in1[0] <= 'z')  {
+	scanf("%s", in2);
+	if (in2[0] = '=')   {
+	var[var_num] = in1[0] - 32;
+	scanf("%s", var_var[var_num]);
+	printf("= %s\n", var_var[var_num]);
+	var_num++; chosen = 1;
+	return ;			}					  }}
+
+} // var_in 함수
 
 
 
