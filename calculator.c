@@ -71,7 +71,7 @@ start:
 	case '+' : { invert1(); convert1(); plus(); convert2(); invert2(); break; }
 	case '-' : { invert1(); compare(); convert1(); minus(); convert2(); invert2(); break; }
 	/*case '*' : { multiply(); }*/
-	case '/' : { compare(); invert1(); convert1(); divide(); convert2(); invert2(); break; }
+	case '/' : { invert1(); compare(); convert1(); divide(); convert2(); invert2(); break; }
 
 	default: ;
 									}
@@ -178,26 +178,18 @@ dae:;
 
 void compare_div(){				// 나누기에 사용하는 크기 비교하는 함수
 
-	res_d = strlen(res_j);
+	for (int i = 49; i >= 0; i--)   {
+	if ( in3_j[i] > res_j[i] )
+	{ daeso = 1; return ; }
+	else if ( in3_j[i] < res_j[i] )
+	{ daeso = 0; return ; }          }
+	
+	for (int i = 0; i <= 8; i++)     {
+	if ( in3_s[i] > res_s[i] )
+	{ daeso = 1; return ; }
+	else if ( in3_s[i] < res_s[i] )
+	{ daeso = 0; return ; }          }
 
-	if (temp3_d > res_d)
-	daeso = 1;
-	else if(temp3_d < res_d)
-	{daeso = 0; goto dae;}
-	else{
-	for (int i = 0; i <= 49; i++)
-	{if (res_j[i] == in3_j[i]);
-	 else if (res_j[i] > in3_j[i])
-	 {daeso = 0; goto dae;}
-	 else {daeso = 1; break;}}}
-
-	 if (daeso == 0) {
-	 for (int i = 0; i <= 8; i++) {
-	 if (res_s[i] == in3_s[i]);
-	 else if (res_s[i] > in3_s[i])
-		  {daeso = 0; break;}
-	 else {daeso = 1; break;}}}
-dae:;
 } // compare_div 함수
 
 void convert1(){		// char > int 변환 함수
