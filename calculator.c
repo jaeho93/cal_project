@@ -72,6 +72,7 @@ start:
 	case '-' : { invert1(); compare(); convert1(); minus(); convert2(); invert2(); break; }
 	/*case '*' : { multiply(); }*/
 	case '/' : { invert1(); compare(); convert1(); divide(); convert2(); invert2(); break; }
+	case '%' : { invert1(); compare(); convert1(); remain(); convert2(); invert2(); break; }
 
 	default: ;
 									}
@@ -366,7 +367,24 @@ void divide(){
 	daeso = 0;
 } // divide 함수
 
+void remain(){
 
+	if ( daeso == 1 )
+	{res_j[0] = 0; daeso = 0; return ;}
+
+	else {
+	minus(); compare_div();
+	if (daeso == 1) ;
+	else {
+	while( daeso != 1 ) {
+	minus_div();
+	compare_div();
+						}
+	}}
+
+	daeso = 0;
+
+} // remain 함수
 
 void initialization(){
 
