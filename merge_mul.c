@@ -90,7 +90,7 @@ start:
 	default: ;
 									}	
 
-	printf("= ");
+	printf("        = ");
 	if (daeso == 1)
 	printf("-");
 	comma(res_j);
@@ -650,8 +650,17 @@ void comma(char n[]){
 
 void VAR(){
 
-	for (int i = 0; var[i] != 0; i++)
-	printf("%c = %s\n", var[i], var_var[i]);
+	for (int i = 0; var[i] != 0; i++){
+	for (int u = 0; u <= N; u++)
+	in1[u] = var_var[i][u];
+	separate();
+	p = strlen(in1_s);
+	printf("        %c = ", var[i]);
+	comma(in1_j);
+	if (p != 0)
+	{printf(".");
+	comma(in1_s);}
+	printf("\n");}	
 	return ;
 
 } // VAR 함수
@@ -664,7 +673,16 @@ void var_in(){
 	if (in2[0] == '=')  {
 	var[var_num] = in1[0];
 	scanf("%s", var_var[var_num]);				// 콤마 찍기 구현 안됨
-	printf("= %s\n", var_var[var_num]);
+	for (int u = 0; u <= N; u++)
+	in1[u] = var_var[var_num][u];
+	separate();
+	p = strlen(in1_s);
+	printf("        = ");
+	comma(in1_j);
+	if (p != 0)
+	{printf(".");
+	comma(in1_s);}
+		
 	var_num++; chosen = 1;
 	return ;			}					}
 	
@@ -673,11 +691,18 @@ void var_in(){
 	if (in2[0] = '=')   {
 	var[var_num] = in1[0] - 32;
 	scanf("%s", var_var[var_num]);
-	printf("= %s\n", var_var[var_num]);
+	for (int u = 0; u <= N; u++)
+	in1[u] = var_var[var_num][u];
+	separate();
+	p = strlen(in1_s);
+	printf("        = ");
+	comma(in1_j);
+	if (p != 0)
+	{printf(".");
+	comma(in1_s);}
+		
 	var_num++; chosen = 1;
 	return ;			}					  }}
 
 } // var_in 함수
-
-
 
