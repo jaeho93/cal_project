@@ -26,6 +26,8 @@ int var_num = 0;
 char c_lear[N] = "clear";
 char e_nd[N] = "end";
 char V_AR[N] = "VAR";
+char s_ave[N] = "save";
+char l_oad[N] = "load";
 
 _Bool carry, point;
 int str_in1, str_in2, str_in3, str_res_s;
@@ -56,6 +58,8 @@ void initialization();
 void comma(char n[]);
 void VAR();
 void var_in();
+void save();
+void load();
 
 int main() {
 
@@ -117,7 +121,11 @@ void c_hoice(){
 	if (choice == 0) exit(1);
 	else { choice = strcmp (in1, V_AR);
 	if (choice == 0) {VAR(); chosen = 1; return ;}
-	}}
+	else { choice = strcmp (in1, s_ave);
+	if (choice == 0) {save(); chosen = 1; return;}
+	else { choice = strcmp (in1, l_oad);
+	if (choice == 0) {load(); chosen = 1; return;}
+	}}}}
 
 } // choice 함수
 
@@ -705,4 +713,86 @@ void var_in(){
 	return ;			}					  }}
 
 } // var_in 함수
+
+void save()
+{
+
+	FILE *out1;
+	FILE *out2;
+	FILE *out3;
+
+	out3 = fopen("save_var_num", "w+");
+	fprintf(out3, "%d", var_num); 
+	fclose(out3);
+
+	out1 = fopen("save_var", "w+");
+
+	for (int i = 0; i <= 9; i++)
+	{
+		if (var[i] != 0)
+		{
+			fprintf(out1, "%c", var[i]);
+		}
+		else break;
+	}
+	
+	fclose(out1);
+	out2 = fopen("save_var_var", "w+");
+
+	for (int i = 0; i <= 9; i++)
+	{
+		if (strlen(var_var[i]) != 0)
+		{
+			fprintf(out2, "%s\n", var_var[i]);	
+		}
+		else break;
+	}
+
+	fclose(out2);
+}
+
+void load()
+{
+	int cnt = 0, u;
+	u = var_num;
+
+	FILE *in1;
+	FILE *in2;
+	FILE *in3;
+
+	in3 = fopen("save_var_num", "r");
+	fscanf(in3, "%d", &cnt);
+	fclose(in3);
+	printf("%d", cnt);
+
+	in1 = fopen("save_var", "r");
+	for (int i = 0; i <= (cnt - 1); u++, i++)
+	{
+		if (u == 10) { fclose(in1); return ; }
+		else
+		{
+			fscanf(in1, "%c", &var[u]);
+		}
+	}
+	
+	u = var_num;
+	fclose(in1);
+	in2 = fopen("save_var_var", "r");
+
+	for (int i = 0; i <= (cnt - 1); u++, i++)
+	{
+		if (u == 10) { fclose(in2); return ; }
+		else
+		{
+			fscanf(in2, "%s", var_var[u]);
+		}
+	}
+	var_num = u;
+	fclose(in2);
+}
+
+
+
+
+
 
