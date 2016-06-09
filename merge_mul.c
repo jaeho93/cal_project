@@ -40,6 +40,7 @@ int begin_val = 0, begin_num = 0, begin_chosen = 0;
 
 void input();
 void c_hoice();		 		// 명령 선택
+void var_cal();
 void separate(); 			// 정수부 소수부 분리
 void invert1();   			// 계산 전 배열 뒤집기
 void invert1_mul_s();
@@ -77,6 +78,7 @@ start:
 
 	if (chosen != 1){
 
+		var_cal();
 		separate();
 
 		switch (in2[0]) 				{		
@@ -172,7 +174,8 @@ void c_hoice(){
 	else
 	{	
 		if (str_in1 == 1)
-		{
+		{	if (str_in2 == 0)
+			{
 			if (in1[0] >= 'A' && in1[0] <= 'Z')
 			{
 				for (int i = 0; i <= 9; i ++)
@@ -203,7 +206,7 @@ void c_hoice(){
 						begin_chosen = 100;
 				}
 			}
-		}
+		}}
 
 		else 
 		{
@@ -226,8 +229,72 @@ void c_hoice(){
 
 } // choice 함수
 
+void var_cal(){
 
+		if (str_in1 == 1)
+		{
+			if (in1[0] >= 'A' && in1[0] <= 'Z')
+			{
+				for (int i = 0; i <= 9; i ++)
+				{
+					if (in1[0] == var[i])
+					{
+						begin_chosen = i;
+						for (int u = 0; u <= 60; u++)
+						in1[u] = var_var[begin_chosen][u];
+						break;	
+					}
+				}
+			}
 
+			else if (in1[0] >= 'a' && in1[0] <= 'z')
+			{
+				in1[0] -= 32;
+				for (int i = 0; i <= 9; i ++)
+				{
+					if (in1[0] == var[i])
+					{
+						begin_chosen = i;
+						for (int u = 0; u <= 60; u++)
+						in1[u] = var_var[begin_chosen][u];
+						break;	
+					}
+				}
+			}
+		}
+
+		if (str_in3 == 1)
+		{
+			if (in3[0] >= 'A' && in3[0] <= 'Z')
+			{
+				for (int i = 0; i <= 9; i ++)
+				{
+					if (in3[0] == var[i])
+					{
+						begin_chosen = i;
+						for (int u = 0; u <= 60; u++)
+						in3[u] = var_var[begin_chosen][u];
+						break;	
+					}
+				}
+			}
+
+			else if (in3[0] >= 'a' && in3[0] <= 'z')
+			{
+				in3[0] -= 32;
+				for (int i = 0; i <= 9; i ++)
+				{
+					if (in3[0] == var[i])
+					{
+						begin_chosen = i;
+						for (int u = 0; u <= 60; u++)
+						in3[u] = var_var[begin_chosen][u];
+						break;	
+					}
+				}
+			}
+		}
+}
 
 void separate(){		// 정수부 소수부 분리하는 함수
 
@@ -865,7 +932,6 @@ void load()
 	in3 = fopen("save_var_num", "r");
 	fscanf(in3, "%d", &cnt);
 	fclose(in3);
-	printf("%d", cnt);
 
 	in1 = fopen("save_var", "r");
 	for (int i = 0; i <= (cnt - 1); u++, i++)
