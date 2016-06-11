@@ -21,6 +21,7 @@ int mul_1[51] = {};
 int mul_3[51] = {};
 int mul[N] = {};
 int div_j[51] = {};
+char quo[61] = {};
 
 char var[10] = {};					// 여기는 변수 저장용으로 초기화 하지 않는다.
 char var_var[10][61] = {};
@@ -45,6 +46,7 @@ int if_minus_first = 0;
 int if_minus_last = 0;
 int when_put_minus = 0;
 int begin_val = 0, begin_num = 0, begin_chosen = 0;
+int div_ok = 0, quo_num=0, quo_before = 0, quo_s = 0;
 
 void input();
 void c_hoice();
@@ -78,6 +80,7 @@ void VAR();
 void var_in();
 void save();
 void load();
+void dividing();
 
 int main() {
 
@@ -167,7 +170,8 @@ start:
 			case '+' : { invert1(); convert1(); plus(); convert2(); invert2(); break; }
 			case '-' : { invert1(); compare(); convert1(); minus(); convert2(); invert2(); break; }
 			case '*' : { invert1(); invert1_mul_s();  multiply(); invert2(); invert2_mul_s(); break;  }
-			case '/' : { invert1(); compare(); convert1(); divide(); convert2(); invert2(); break; }
+			case '/' : {printf("지호 "); dividing();  convert2(); break; }
+
 			case '%' : { invert1(); compare(); convert1(); remain(); convert2(); invert2(); break; }
 
 			default: ;
@@ -547,7 +551,9 @@ void separate(){		// 정수부 소수부 분리하는 함수
 	for (int i = 0; i <= 49; i++) {
 		if (in1[i] == '.')
 		{temp1_d = i+1; break;}
-		else in1_j[i] = in1[i];		  }
+		else in1_j[i] = in1[i];		 
+   	}
+
 	if (in1[50] == '.')
 		temp1_d = 51;
 
@@ -1039,6 +1045,7 @@ void initialization(){
 		mul[i] = 0;
 		temp_in1[i] = 0;
 		temp_in3[i] = 0;
+		quo[i] = 0;
 	}
 	for (int i = 0; i <= 49; i++)
 	{
@@ -1065,6 +1072,7 @@ void initialization(){
 	if_minus_last = 0, if_minus_first = 0, minus_sign_count = 0;
 	when_put_minus = 0;
 	begin_val = 0, begin_num = 0, begin_chosen = 0;
+	div_ok = 0, quo_num = 0, quo_before = 0, quo_s = 0;
 
 } // 초기화 함수
 
@@ -1214,6 +1222,105 @@ void load()
 	var_num = u;
 	fclose(in2);
 }
+
+void dividing()
+{
+
+	printf("지호");
+
+	for(int i = 0 ; i < strlen(in1_j) ; i++) {// in1_s 소수부 받고 in1_j 정수부 받기
+		mul_1[i] = in1_j[i]-'0'; printf("%d", mul_1[i]);	}
+	for(int i = strlen(in1_j), t = 0 ; i < strlen(in1_s) + strlen(in1_j) ;){ // 변수 t 설정(정수부 넣기 위해서)
+		mul_1[i] = in1_s[t]-'0';
+		t++,i++;  printf("%d",mul_1[i]);
+	}
+
+	for(int i = 0 ; i < strlen(in3_j) ; i++) // in3_s 소수부 받고 in1_j 정수부 받기
+		mul_3[i] = in3_j[i]-'0';	
+	for(int i = strlen(in3_j), t = 0 ; i < strlen(in3_s) + strlen(in3_j) ; ){
+		mul_3[i] = in3_s[t]-'0';
+		t++,i++;}
+
+while(1)
+{
+	for (int i = 0; i <= 58; i++)
+	{
+		if (mul_1[i] != 0)
+			{
+				div_ok = 1;
+				break;
+			}
+	}
+
+	if (div_ok == 1)
+	{
+		if (strlen(quo) < (strlen(in3_j) + 9))
+			div_ok = 1;
+		else
+			div_ok = 0;
+	}
+
+
+
+if (div_ok == 1)
+{
+love:
+	if (mul_1[0] >= mul_3[0])
+	{
+		for (int i = 0; i <= 58; i++)
+			mul_1[i] = mul_1[i] - mul_3[i];
+		for (int i = 1; i <= 58; i++)
+		{
+			if (mul_1[i] < 0)
+			{
+				mul_1[i] += 10;
+				mul_1[i-1] -= 1;
+			}
+		}
+	quo[quo_num]++;
+	goto love;
+	}
+	else
+	{
+	quo_before = mul_1[0];
+	mul_1[1] += quo_before * 10;
+	for (int i = 0; i <= 58; i++)
+	mul_1[i] = mul_1[i + 1];
+	quo_num++;
+	}
+}
+
+else
+	break;
+}
+
+for (int i = 0, u = 0; i <= strlen(in3_j); i++)
+{
+	if (quo[i] == 0)
+	{
+		for (int zu = i + 1; zu <= 58; zu++)
+		{
+		if (quo[zu] != 0 )
+		{
+		res_j[u] = quo[i];
+		u++;
+	    quo_s = i+1;
+		break;
+		}
+		}
+	}	
+
+	else
+	{
+		res_j[u] = quo[i];
+		u++;
+	    quo_s = i+1;	
+	}
+}
+for (int i = 0; i <= 9; i++, quo_s++)
+res_s[i] = quo[quo_s];
+}
+
 
 
 
