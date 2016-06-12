@@ -19,6 +19,8 @@ char res_j[51] = {};
 char res_s[10] = {};
 int mul_1[51] = {};
 int mul_3[51] = {};
+int div_1[61] = {};
+int div_3[61] = {};
 int mul[N] = {};
 int div_j[51] = {};
 char quo[61] = {};
@@ -36,7 +38,7 @@ char l_oad[N] = "load";
 _Bool carry, point;
 //_Bool minus_count_1, minus_count_2;
 
-int str_in1, str_in2, str_in3, str_res_s;
+int str_in1, str_in2, str_in3, str_res_s, str_in3_j, str_in1_j;
 int temp = 0, temp1_d = 0, temp3_d = 0, res_d = 0, temp_j = 0, temp_s = 0;
 int first = 0, last = 0;
 int k = 0, p = 0, q = 0, daeso = 0, choice = 0, chosen;
@@ -46,7 +48,7 @@ int if_minus_first = 0;
 int if_minus_last = 0;
 int when_put_minus = 0;
 int begin_val = 0, begin_num = 0, begin_chosen = 0;
-int div_ok = 0, quo_num=0, quo_before = 0, quo_s = 0;
+int quo_max = 0, quo_s_max = 0, div_ok = 0, quo_s = 0, quo_swap = 0, quo_swap_val = 0, div_sosu = 0;
 
 void input();
 void c_hoice();
@@ -72,15 +74,19 @@ void plus();
 void minus();
 void minus_div();			// 나누기용 마이너스
 void multiply();
+void dividing();
+void dividing2();
+void quo_arrange();
+void quo_arrange2();
 void divide();
 void remain();
+void remain2();
 void initialization();
 void comma(char n[]);
 void VAR();
 void var_in();
 void save();
 void load();
-void dividing();
 
 int main() {
 
@@ -170,8 +176,9 @@ start:
 			case '+' : { invert1(); convert1(); plus(); convert2(); invert2(); break; }
 			case '-' : { invert1(); compare(); convert1(); minus(); convert2(); invert2(); break; }
 			case '*' : { invert1(); invert1_mul_s();  multiply(); invert2(); invert2_mul_s(); break;  }
-			case '/' : { dividing();  convert2(); break; }
-			case '%' : { invert1(); compare(); convert1(); remain(); convert2(); invert2(); break; }
+			case '/' : {dividing(); break; }
+
+			case '%' : {remain2(); break; }
 
 			default: ;
 		}	
@@ -550,7 +557,9 @@ void separate(){		// 정수부 소수부 분리하는 함수
 	for (int i = 0; i <= 49; i++) {
 		if (in1[i] == '.')
 		{temp1_d = i+1; break;}
-		else in1_j[i] = in1[i];		  }
+		else in1_j[i] = in1[i];		 
+   	}
+
 	if (in1[50] == '.')
 		temp1_d = 51;
 
@@ -1043,6 +1052,8 @@ void initialization(){
 		temp_in1[i] = 0;
 		temp_in3[i] = 0;
 		quo[i] = 0;
+		div_1[i] = 0;
+		div_3[i] = 0;
 	}
 	for (int i = 0; i <= 49; i++)
 	{
@@ -1061,7 +1072,7 @@ void initialization(){
 		res_s[i] = 0;
 	}
 
-	str_in1 = 0, str_in2 = 0, str_in3 = 0, str_res_s = 0;
+	str_in1 = 0, str_in2 = 0, str_in3 = 0, str_res_s = 0, str_in3_j = 0, str_in1_j = 0;
 	temp = 0, temp1_d = 0, temp3_d = 0, temp_j = 0, temp_s = 0;
 	first = 0, last = 0;
 	k = 0, p = 0, q = 0, daeso = 0, choice = 0, chosen = 0;
@@ -1069,7 +1080,7 @@ void initialization(){
 	if_minus_last = 0, if_minus_first = 0, minus_sign_count = 0;
 	when_put_minus = 0;
 	begin_val = 0, begin_num = 0, begin_chosen = 0;
-	div_ok = 0, quo_num = 0, quo_before = 0, quo_s = 0;
+	quo_max = 0, quo_s_max = 0, div_ok = 0, quo_s = 0, quo_swap = 0, quo_swap_val = 0, div_sosu = 0;
 
 } // 초기화 함수
 
@@ -1222,86 +1233,262 @@ void load()
 
 void dividing()
 {
-	for(int i = 0 ; i < strlen(in1_j) ; i++) // in1_s 소수부 받고 in1_j 정수부 받기
-		mul_1[i] = in1_j[i]-'0';	
+
+	str_in1_j = strlen(in1_j);
+	str_in3_j = strlen(in3_j);
+	printf("%d\n", str_in1_j);
+	printf("%d\n", str_in3_j);
+	quo_max = str_in1_j - str_in3_j + 1; // 몫의 정수 자리수 예를 들어 이게 3이면 몫의 앞자리 3개가 정수이고 그밑으로 9자리까지 몫 받고 함수 종료된다. 
+	if (quo_max < 0)
+	{
+		quo_swap = -quo_max;
+		quo_max = 0;
+	}
+	quo_s_max = quo_max + 9;
+
+	for(int i = 0 ; i < strlen(in1_j) ; i++) {// in1_s 소수부 받고 in1_j 정수부 받기
+		div_1[i] = in1_j[i]-'0'; printf("%d\n", div_1[i]);	}
 	for(int i = strlen(in1_j), t = 0 ; i < strlen(in1_s) + strlen(in1_j) ;){ // 변수 t 설정(정수부 넣기 위해서)
-		mul_1[i] = in1_s[t]-'0';
-		t++,i++;}
+		div_1[i] = in1_s[t]-'0';
+		t++,i++; 
+	}
 
 	for(int i = 0 ; i < strlen(in3_j) ; i++) // in3_s 소수부 받고 in1_j 정수부 받기
-		mul_3[i] = in3_j[i]-'0';	
+	{div_3[i] = in3_j[i]-'0'; printf("%d\n", div_3[i]);}
 	for(int i = strlen(in3_j), t = 0 ; i < strlen(in3_s) + strlen(in3_j) ; ){
-		mul_3[i] = in3_s[t]-'0';
-		t++,i++;}
-
-while(1)
-{
-	for (int i = 0; i <= 58; i++)
+		div_3[i] = in3_s[t]-'0';
+		t++,i++; }
+	
+	for ( int quo_i = 0; quo_i < quo_s_max; quo_i++)
 	{
-		if (mul_1[i] != 0)
+can_you_divide:
+
+		if (div_1[0] > div_3[0]) // dividend의 첫째 짜리수가 divisor의 첫쨰 자리 수보다 크다. >> 무조건 나눌수 있는 경우 
+		{
+		i_can_divide:
+
+			for ( int i = 0; i <= 58; i++)
+				div_1[i] = div_1[i] - div_3[i];
+			{quo[quo_i]++; printf("%d%d\n", div_1[0],div_1[1]);}
+			for ( int i = 1; i <= 58; i++)
 			{
-				div_ok = 1;
+				if ( div_1[i] < 0 )
+				{
+					div_1[i] += 10;
+					div_1[i-1] -= 1;
+				}
+			}
+		goto can_you_divide;
+		}
+		else
+		{
+			for (int i = 0; i <= 58; i++)
+			{
+				if (div_1[i] < div_3[i])
+				{
+					dividing2();
+					break;
+				}
+				else
+				{
+					if (div_1[i] > div_3[i])
+						goto i_can_divide;
+				}
+			}
+			if (div_ok == 1)
+			{
+				div_ok = 0;
+			}
+			else
+			{
+				quo[quo_i]++;
 				break;
 			}
+		}
 	}
+	for (int i = 0; i <= 59; i++)
+	printf("quo : %d\n", quo[i]);	
+	quo_arrange();
+}
+			
 
-	if (div_ok == 1)
+
+void dividing2()
+{
+	div_1[1] += div_1[0] * 10;
+	for (int swap = 0; swap <= 58; swap++)
+		div_1[swap] = div_1[swap+1];
+	div_ok = 1;
+}
+
+void quo_arrange()
+{
+	for (int quo_i = 0; quo_i < quo_max; quo_i++)
 	{
-		if (strlen(quo) < (strlen(in3_j) + 9))
-			div_ok = 1;
+		if ( quo[quo_i] != 0)
+		{
+			quo_s = quo_i;
+			printf("quo_s: %d, quo_max: %d", quo_s, quo_max);
+			break;
+		}
 		else
-			div_ok = 0;
+			quo_s = quo_max;
+	}
+
+	if (quo_s != quo_max)
+	{
+		for (int i = 0; quo_s < quo_max; quo_s++, i++)
+			res_j[i] = quo[quo_s] + '0';
+	}
+
+	if (quo_swap != 0)
+	{
+		for ( int i = 0; i < quo_swap; i++)
+			res_s[i] = 0;
+	
+		quo_swap_val = quo_swap;
+	}
+
+	for (; quo_max <= quo_s_max-1; quo_swap_val++, quo_max++)
+	{
+		res_s[quo_swap_val] = quo[quo_max];
 	}
 
 
 
-if (div_ok == 1)
+	for (int i = 8; i >= 0; i--) {
+		if  (res_s[i] != 0)
+		{temp_s = i; break;}	     }
+
+	if (temp_s != 0)              {
+		for (int i = 0; i <= temp_s; i++)
+			res_s[i] += '0';             }
+
+	if (temp_s == 0){
+		if (res_s[0] != 0){
+			for (int i = 0; i <= temp_s; i++)
+				res_s[i] += '0';}}
+
+	p = strlen(res_s);
+	
+}
+
+void remain2()
 {
 
-	if (mul_1[0] >= mul_3[0])
+	str_in1_j = strlen(in1_j);
+	str_in3_j = strlen(in3_j);
+	printf("%d\n", str_in1_j);
+	printf("%d\n", str_in3_j);
+	quo_max = str_in1_j - str_in3_j + 1; // 몫의 정수 자리수 예를 들어 이게 3이면 몫의 앞자리 3개가 정수이고 그밑으로 9자리까지 몫 받고 함수 종료된다. 
+	if (quo_max < 0)
 	{
-		for (int i = 0; i <= 58; i++)
-			mul_1[i] = mul_1[i] - mul_3[i];
-		for (int i = 1; i <= 58; i++)
+		quo_swap = -quo_max;
+		quo_max = 0;
+	}
+	quo_s_max = quo_max + 9;
+
+	for(int i = 0 ; i < strlen(in1_j) ; i++) {// in1_s 소수부 받고 in1_j 정수부 받기
+		div_1[i] = in1_j[i]-'0'; printf("%d\n", div_1[i]);	}
+	for(int i = strlen(in1_j), t = 0 ; i < strlen(in1_s) + strlen(in1_j) ;){ // 변수 t 설정(정수부 넣기 위해서)
+		div_1[i] = in1_s[t]-'0';
+		t++,i++; 
+	}
+
+	for(int i = 0 ; i < strlen(in3_j) ; i++) // in3_s 소수부 받고 in1_j 정수부 받기
+	{div_3[i] = in3_j[i]-'0'; printf("%d\n", div_3[i]);}
+	for(int i = strlen(in3_j), t = 0 ; i < strlen(in3_s) + strlen(in3_j) ; ){
+		div_3[i] = in3_s[t]-'0';
+		t++,i++; }
+	
+	for ( int quo_i = 0; quo_i < quo_max; quo_i++)
+	{
+can_you_divide:
+
+		if (div_1[0] > div_3[0]) // dividend의 첫째 짜리수가 divisor의 첫쨰 자리 수보다 크다. >> 무조건 나눌수 있는 경우 
 		{
-			if (mul_3[i] < 0)
+		i_can_divide:
+
+			for ( int i = 0; i <= 58; i++)
+				div_1[i] = div_1[i] - div_3[i];
+			{quo[quo_i]++; printf("%d%d\n", div_1[0],div_1[1]);}
+			for ( int i = 58; i >= 1; i--)
 			{
-				mul_3[i] += 10;
-				mul_3[i-1] -= 1;
+				if ( div_1[i] < 0 )
+				{
+					div_1[i] += 10;
+					div_1[i-1] -= 1;
+				}
+			}
+		goto can_you_divide;
+		}
+		else
+		{
+			for (int i = 0; i <= 58; i++)
+			{
+				if (div_1[i] < div_3[i])
+				{
+					dividing2();
+					break;
+				}
+				else
+				{
+					if (div_1[i] > div_3[i])
+						goto i_can_divide;
+				}
+			}
+			if (div_ok == 1)
+			{
+				div_ok = 0;
+			}
+			else
+			{
+				quo[quo_i]++;
+				break;
 			}
 		}
-		quo[quo_num]++;
 	}
-	else
-	{
-	quo_before = mul_1[0];
-	mul_1[1] += quo_before * 10;
-	for (int i = 0; i <= 58; i++)
-	mul_1[i] = mul_1[i + 1];
-	quo_num++; 
-	}
+	quo_arrange2();
 }
+			
 
-else
-	break;
-}
-
-for (int i = 0, u = 0; i <= strlen(in3_j); i++)
+void quo_arrange2()
 {
-	if (quo[i] == 0);
-	else
+
+	for (int i = 0; i <= 59; i++)
+		printf("%d", div_1[i]);
+		printf("%d", str_in3_j);
+		for (int i = 0; i < str_in3_j; i++)
+			res_j[i] = div_1[i] + '0';
+
+		for (int i = str_in3_j; i <= quo_s_max-1; i++)
+		{
+			if (div_1[i] != 0)
+				{div_sosu = 1; break;}
+		}
+
+if ( div_sosu != 0)
+{
+	for (; str_in3_j <= quo_s_max-1; str_in3_j++, quo_max++)
 	{
-		res_j[u] = quo[i];
-		u++;
-	    quo_s = i+1;	
+		res_s[str_in3_j] = div_1[quo_max];
 	}
+
+
+
+	for (int i = 8; i >= 0; i--) {
+		if  (res_s[i] != 0)
+		{temp_s = i; break;}	     }
+
+	if (temp_s != 0)              {
+		for (int i = 0; i <= temp_s; i++)
+			res_s[i] += '0';             }
+
+	if (temp_s == 0){
+		if (res_s[0] != 0){
+			for (int i = 0; i <= temp_s; i++)
+				res_s[i] += '0';}}
 }
-for (int i = 0; i <= 9; i++, quo_s++)
-res_s[i] = quo[quo_s];
+	p = strlen(res_s);
+	
 }
-
-
-
-
-
-
