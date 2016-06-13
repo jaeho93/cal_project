@@ -38,7 +38,7 @@ char l_oad[N] = "load";
 
 _Bool carry, point;
 
-int str_in1, str_in2, str_in3, str_res_s, str_in3_j, str_in1_j;
+int str_in1, str_in2, str_in3, str_res_s, str_in3_j, str_in1_j;  //in1 , in2, in3, res_s의 길이
 int temp = 0, temp1_d = 0, temp3_d = 0, res_d = 0, temp_j = 0, temp_s = 0;
 char temp_var_s[10][10] = {}, temp_var_j[10][10] = {}, temp_var_d = 0;
 char var_var_j[10][10] = {}, var_var_s[10][10] = {};
@@ -46,23 +46,23 @@ int first = 0, last = 0;
 int k = 0, p = 0, q = 0, daeso = 0, choice = 0, chosen;
 int m = 0, x = 0, y = 0;
 int minus_sign_count = 0;
-int if_minus_first = 0;
-int if_minus_last = 0;
+int if_minus_first = 0;    //input1 부호 체크
+int if_minus_last = 0;     //input3 부호 체크
 int when_put_minus = 0;
 int begin_val = 0, begin_num = 0, begin_chosen = 0;
 int quo_max = 0, quo_s_max = 0, div_ok = 0, quo_s = 0, quo_swap = 0, quo_swap_val = 0, div_sosu = 0, remain_zero = 0, remain_s = 0;
 int again = 0, num = 0, var_cal_switch = 0;
 
-void input();
+void input();   // 입력받는 함수
 void error();
-void c_hoice();
-void var_cal();	
+void c_hoice();  // 변수인지 명령인지 구별하는 함수
+void var_cal();	 //수식에서 변수 사용 지원한는 함수
 void separate(); 			// 정수부 소수부 분리
 
-void check_sign_in1();
-void check_sign_in3();
-void re_array_in1();
-void re_array_in3();
+void check_sign_in1();   //input 부호체크
+void check_sign_in3();   //input3 부호체크
+void re_array_in1();     //(-)부호 제외하고 다항연산 고려해서 input1 재배열
+void re_array_in3();     //(-)부호 제외하고 다항연산 고려해서 input3 재배열
 
 void invert1();   			// 계산 전 배열 뒤집기
 void invert1_mul_s();
@@ -71,20 +71,20 @@ void invert2_mul_s();
 void compare();				// 앞뒤수 비교
 void convert1();			// char > int 변환
 void convert2();			// int > char 변환
-void plus();
-void minus();
-void multiply();
+void plus();                // 더하기 함수
+void minus();               // 빼기 함수
+void multiply();            // 곱하기 함수
 void dividing();
 void dividing2();
 void quo_arrange();
 void quo_arrange2();
 void remain2();
-void initialization();
-void comma(char n[]);
+void initialization();    // 계산을 여러번 반복하기 위해 배열, 변수를 초기화 하는 함수
+void comma(char n[]);     // 3자리마다 콤마 출력하는 함수 
 void VAR();
-void var_in();
-void save();
-void load();
+void var_in();            // 변수선언 할때 사용하는 함수
+void save();              // 변수값을 파일로 저장하는 함수
+void load();              // 파일로부터 변수값을 읽어오는 함수
 void which_sign();
 
 
@@ -107,7 +107,7 @@ start:
 
 	c_hoice();
 
-	if (chosen != 1){
+	if (chosen != 1){    //in1에 입력받은 문자가 1자리 대소문자가 아닌 경우
 
 		var_cal();
 		if (var_cal_switch == 1)
@@ -117,10 +117,10 @@ start:
 			goto start;
 		}
 
-		check_sign_in1();
-		check_sign_in3();
-		re_array_in1();
-		re_array_in3();
+		check_sign_in1();   // input1 +/- 부호 체크
+		check_sign_in3();   // input3 +/- 부호 체크
+		re_array_in1();     // 다항 연산 고려  순서 바꿔 저장
+		re_array_in3();     // 다항 연산 고려  순사 바꿔 저장
 		separate();
 
 		which_sign();
@@ -163,10 +163,10 @@ void input()
 {
 	for (int i = 0; i < 100; i++)
 	{
-		begin_val = getchar();
-		if (begin_val != 10)
+		begin_val = getchar();   // 문자 한 개씩 받아서 bigin_var넣기
+		if (begin_val != 10)     // 받은 문자가 엔터가 아닌 경우
 			begin[i] = begin_val;
-		else
+		else                     // 받은 문자가 엔터인 경우
 		{
 			begin[i] = begin_val;
 			break;
@@ -174,12 +174,12 @@ void input()
 	}
 	for (int i = 0; i <= 60; i++)
 	{
-		if (begin[i] == 10)
+		if (begin[i] == 10)         // 받은 문자가 엔터인 경우
 			return ;
 		else {
-			if (begin[i] != 32)
+			if (begin[i] != 32)     // 받은 문자가 공백이 아닌 경우
 				in1[i] = begin[i];
-			else
+			else                    // 받은 문자가 엔터인 경우
 			{
 				begin_num = i + 1;
 				break;
@@ -187,13 +187,13 @@ void input()
 		}}
 	for (int i = 0; i <= 60; i++, begin_num++)
 	{
-		if (begin[begin_num] == 10)
+		if (begin[begin_num] == 10)   // 받은 문자가 엔터인 경우
 			return ;
-		else 
+		else                          // 받은 문자가 엔터가 아닌 경우
 		{
-			if (begin[begin_num] != 32)
+			if (begin[begin_num] != 32)  // 받은 문자가 공백이 아닌 경우
 				in2[i] = begin[begin_num];
-			else 
+			else                          // 공백인 경우
 			{
 				begin_num++;
 				break;
@@ -203,31 +203,31 @@ void input()
 
 	for (int i = 0; i <= 60; i++, begin_num++)
 	{
-		if (begin[begin_num] != 10)
+		if (begin[begin_num] != 10)          // 받은 문자가 엔터인 경우
 			in3[i] = begin[begin_num];
-		else
+		else                                  // 엔터 아님
 			break;
 	}
 }
 
 void c_hoice(){
 
-	str_in1 = strlen(in1);
+	str_in1 = strlen(in1);      // in1, in2, in3 길이 재기
 	str_in2 = strlen(in2);
 	str_in3 = strlen(in3);
 
-	var_in(); if (chosen == 1) return ;
+	var_in(); if (chosen == 1) return ;         //var_in 함수 에서 나왔던 chosen이 1이면(= 변수 1개가 정의됬으면) choice함수 종료
 
-	else
+	else            // var_in함수에서 변수가 정의 되지 않았으면
 	{
-		if (str_in1 == 1)
-		{	if (str_in2 == 0)
+		if (str_in1 == 1)    //in1에 입력받은 문자가 1 자리인 경우
+		{	if (str_in2 == 0)  // 그뒤로 아무것도 입력받지 않은경우
 			{
-				if (in1[0] >= 'A' && in1[0] <= 'Z')
+				if (in1[0] >= 'A' && in1[0] <= 'Z')  //in1에 대문자가 들어온 경우
 				{
 					for (int i = 0; i <= 9; i ++)
 					{
-						if (in1[0] == var[i])
+						if (in1[0] == var[i])    //in1에 입력된 문자가 var에 선언된 변수 이름과 같은경우
 						{
 							begin_chosen = i;
 							printf("        = ");
@@ -252,14 +252,14 @@ void c_hoice(){
 							return;
 
 						}
-						else
+						else     // in1이 var에 선언된 변수가 아닌 경우
 							begin_chosen = 100;
 					}
 				}
 
-				else if (in1[0] >= 'a' && in1[0] <= 'z')
+				else if (in1[0] >= 'a' && in1[0] <= 'z')   // 소문자인 경우
 				{
-					in1[0] -= 32;
+					in1[0] -= 32;  // 대문자로 바꾸기
 					for (int i = 0; i <= 9; i ++)
 					{
 						if (in1[0] == var[i])
@@ -313,12 +313,12 @@ void c_hoice(){
 
 } // choice 함수
 
-void var_cal(){
+void var_cal(){ /* 수식에서 변수를 연산자로 사용 할 때  쓰는 함수 */
 
-	if (str_in1 == 2)
-		if (in1[0] == '-')
+	if (str_in1 == 2)  // 두자리수 받은  경우
+		if (in1[0] == '-')  // 음수인 경우
 		{
-			if (in1[1] >= 'A' && in1[1] <= 'Z')
+			if (in1[1] >= 'A' && in1[1] <= 'Z')  // 변수 이름인 경우
 			{
 				for (int i = 0; i <= 9; i ++)
 				{
@@ -339,7 +339,7 @@ void var_cal(){
 			}
 
 
-			else if (in1[1] >= 'a' && in1[1] <= 'z')
+			else if (in1[1] >= 'a' && in1[1] <= 'z')   //변수 이름인 경우
 			{
 				in1[1] -= 32;
 				for (int i = 0; i <= 9; i ++)
@@ -361,10 +361,10 @@ void var_cal(){
 			}
 		}
 
-	if (str_in3 == 2)
-		if (in3[0] == '-')
+	if (str_in3 == 2)   // in3에 두자리 받은 경우
+		if (in3[0] == '-')  // 음수인 경우
 		{
-			if (in3[1] >= 'A' && in3[1] <= 'Z')
+			if (in3[1] >= 'A' && in3[1] <= 'Z')  //변수 이름인 경우
 			{
 				for (int i = 0; i <= 9; i ++)
 				{
@@ -385,9 +385,9 @@ void var_cal(){
 			}
 
 
-			else if (in3[1] >= 'a' && in3[1] <= 'z')
+			else if (in3[1] >= 'a' && in3[1] <= 'z')  //변수이름 (소문자)인 경우
 			{
-				in3[1] -= 32;
+				in3[1] -= 32;  // 대문자로 바꾸기
 				for (int i = 0; i <= 9; i ++)
 				{
 					if (in3[1] == var[i])
@@ -497,58 +497,59 @@ void var_cal(){
 }
 
 void check_sign_in1(){ // 부호 체크하는 함수
-	if(in1[0] == '-'){
+	if(in1[0] == '-'){  // 음수면
 		for(int i = 0 ; i < N; i++){
-			temp_in1[i] = in1[i+1];}
-		if_minus_first += 1;
-		minus_sign_count += 1;}
+			temp_in1[i] = in1[i+1];}  // - 부호 제외하고 임시 저장 배열에 넣기
+		if_minus_first += 1;          // input1이  음수
+		minus_sign_count += 1;}       // 결과에 (-) 붙일지 말지 판별
 
-	else
+	else  // 양수
 		for(int i = 0; i < N ; i++)
 			temp_in1[i] = in1[i];
 }	
 
 void check_sign_in3(){ // 부호 체크하는 함수
-	if(in3[0] == '-'){
-		for(int i = 0 ; i < N; i++){
-			temp_in3[i] = in3[i+1];}
-		if_minus_last += 1;
-		minus_sign_count += 1;}
+	if(in3[0] == '-'){  // 음수
+		for(int i = 0 ; i < N; i++){  
+			temp_in3[i] = in3[i+1];}  // - 부호 제외하고 임시 저장 배열에 넣기
+		if_minus_last += 1;        // 두번째 연산자가 음수
+		minus_sign_count += 1;}    // 결과에 (-)를 붙일지 말지 판별
 
-	else
+	else   // 양수면
 		for(int i = 0; i < N ; i++)
-			temp_in3[i] = in3[i];
+			temp_in3[i] = in3[i];  // 그대로 임시 저장 배열에 넣기
 }	
 
-void re_array_in1(){ // 원래의 배열(in1)에 부호를 빼서 넣어주는 함수
+void re_array_in1(){            // 원래의 배열(in1)에 부호를 빼서 넣어주는 함수
 	if(in2[0] == '/' || in2[0] == '%'){
-		if((if_minus_first + if_minus_last)== 0) 
+		if((if_minus_first + if_minus_last)== 0)   // 두 연산자 모두 양수 일때
 			for(int i = 0; i < N; i++)
 				in1[i] = temp_in1[i];
 		else if((if_minus_first + if_minus_last) == 1){
-			if(if_minus_first == 1){
+			if(if_minus_first == 1){   // 첫번째가 음수
 				for(int i = 0; i < N; i++)
 					in1[i] = temp_in1[i];}
-			if(if_minus_last == 1){	
+			if(if_minus_last == 1){	  // 두번째수가 음수
 				for(int i = 0; i < N; i++)
 					in1[i] = temp_in1[i];}}
-		else
+		else                  // 둘다  음수
 			for(int i = 0; i < N; i++)
 				in1[i] = temp_in1[i];}
 
 
-	else{
-		if((if_minus_first + if_minus_last)== 0) 
+	else{   // + , - , % 연산인 경우
+		if((if_minus_first + if_minus_last)== 0) // 둘다  양수
 			for(int i = 0; i < N; i++)
 				in1[i] = temp_in1[i];
+
 		else if((if_minus_first + if_minus_last) == 1){
-			if(if_minus_first == 1){
+			if(if_minus_first == 1){  // 첫번째가 음수
 				for(int i = 0; i < N; i++)
 					in3[i] = temp_in1[i];}
-			if(if_minus_last == 1){	
+			if(if_minus_last == 1){	  // 두번째가 음수
 				for(int i = 0; i < N; i++)
 					in1[i] = temp_in1[i];}}
-		else
+		else  // 둘다 음수
 			for(int i = 0; i < N; i++)
 				in3[i] = temp_in1[i];}
 
@@ -592,17 +593,17 @@ void separate(){		// 정수부 소수부 분리하는 함수
 
 	for (int i = 0; i <= 49; i++) {
 		if (in1[i] == '.')
-		{temp1_d = i+1; break;}
-		else in1_j[i] = in1[i];		  }
+		{temp1_d = i+1; break;}  // in1의 정수부분 in1_j 배열에 저장
+		else in1_j[i] = in1[i];		  } 
 	if (in1[50] == '.')
 		temp1_d = 51;
 
 	if (temp1_d != 0){
 		for (int i = 0; i <= 8; temp1_d++, i++)
-			in1_s[i] = in1[temp1_d];
+			in1_s[i] = in1[temp1_d];  // 처음 숫자 소수부분 in1_s 배열에 저장
 	}
 
-	for (int i = 0; i <= 49; i++) {
+	for (int i = 0; i <= 49; i++) {  // 두번째 입력받은수 똑같이 반복
 		if (in3[i] == '.')
 		{temp3_d = i+1; break;}
 		else in3_j[i] = in3[i];		  }
@@ -766,9 +767,9 @@ void plus(){
 
 	for (int i = 8; i >= 0; i--)			{	// 소수 더하기
 		res_s[i] = in1_s[i] + in3_s[i] + k;
-		if (res_s[i] >= 10) 	{
-			k = 1; res_s[i] -= 10;}					// 오류 생길 수 있다.
-		else k = 0;								}
+		if (res_s[i] >= 10) 	{  // 더해서 10 넘어가면
+			k = 1; res_s[i] -= 10;}					// 1올림수 k 에 저장 / 10을 뺀 나머지 저장 /예를 들어 더해서 17이면  앞배열에 1 더하고 현재배열에 7 저장 /  오류 생길 수 있다.
+		else k = 0;								} 	// 더해서 10미만이면 올릴 수 없음
 
 		p = strlen(res_s);
 
@@ -790,14 +791,14 @@ void minus(){
 				if (res_s[i] < 0) 	{
 					k = 1; res_s[i] += 10;}					// 오류 생길 수 있다.
 				else k = 0;								}}
-			if (res_s[0] < 0)
-			{res_s[0] += 10; k = 1;}
-			else k = 0;
+			if (res_s[0] < 0)								// 소수자리 연산 후 소수 첫째 자리가 음수면 10 더하기
+			{res_s[0] += 10; k = 1;}						// 1만큼 정수 자리에서 뺴기 위함
+			else k = 0;										// 소수 첫째 자리가 음수가 아니면 정수에서 1 안 뻄
 
 			for (int i = 0; i <= 49; i++)			{		// 정수 빼기
-				res_j[i] = in1_j[i] - in3_j[i] - k;
+				res_j[i] = in1_j[i] - in3_j[i] - k;			// 정수끼리 빼기( k : 정수에서 빌려온 값이 있으면 1, 없으면 0)
 				if (res_j[i] < 0)	{
-					k = 1; res_j[i] += 10;}
+					k = 1; res_j[i] += 10;}					// 빼서 음수면 10 더한 값 저장
 				else k = 0;								}
 
 	}
@@ -825,32 +826,32 @@ void minus(){
 
 void multiply(){
 
-	x = strlen(in1_s) + strlen(in1_j);
-	y = strlen(in3_s) + strlen(in3_j);
+	x = strlen(in1_s) + strlen(in1_j); // x = (in1_s 의 소수길이) + (in1_j 의 정수길이)
+	y = strlen(in3_s) + strlen(in3_j); // y = (in3_s 의 소수길이) + (in3_j 의 정수길이)
 
-	for(int i = 0 ; i < strlen(in1_s) ; i++) // in1_s 소수부 받고 in1_j 정수부 받기
+	for(int i = 0 ; i < strlen(in1_s) ; i++) // in1_s 소수부 받고 in1_j 정수부 받기(문자를 숫자로 변환하여 저장)
 		mul_1[i] = in1_s[i]-'0';	
-	for(int i = strlen(in1_s), t = 0 ; i < strlen(in1_s) + strlen(in1_j) ;){ // 변수 t 설정(정수부 넣기 위해서)
-		mul_1[i] = in1_j[t]-'0';
+	for(int i = strlen(in1_s), t = 0 ; i < strlen(in1_s) + strlen(in1_j) ;){ // 지역변수 t 설정(정수부 넣기 위해서)
+		mul_1[i] = in1_j[t]-'0';			
 		t++,i++;}
 
-	for(int i = 0 ; i < strlen(in3_s) ; i++) // in3_s 소수부 받고 in1_j 정수부 받기
+	for(int i = 0 ; i < strlen(in3_s) ; i++) // in3_s 소수부 받고 in1_j 정수부 받기(문자를 숫자로 변환하여 저장)
 		mul_3[i] = in3_s[i]-'0';	
-	for(int i = strlen(in3_s), t = 0 ; i < strlen(in3_s) + strlen(in3_j) ; ){
+	for(int i = strlen(in3_s), t = 0 ; i < strlen(in3_s) + strlen(in3_j) ;){ // 지역변수 t 설정(정수부 넣기 위해서)
 		mul_3[i] = in3_j[t]-'0';
 		t++,i++;}
 
 
-	if(strlen(in3) >= strlen(in1)){  //곱셈결과를 mul배열에 차곡차곡 쌓는 과정
-		for(int i = 0; i < x; i++){  // 더 짧은수 돌리는 for문
-			for(int n = 0; n < y; n++)		
+	if(strlen(in3) >= strlen(in1)){  // 곱셈결과를 mul배열에 차곡차곡 쌓는 과정(in3의 길이가 더 긴 경우)
+		for(int i = 0; i < x; i++){ 
+			for(int n = 0; n < y; n++) // mul 배열에 mul_1 과 mul_3 의 곱셈한 값을 저장	
 			{mul[m] += (mul_1[i] * mul_3[n]);	
 				m++;}
 
 			m -= y-1;}}
-	else{
+	else{							// 곱셈결과를 mul배열에 차곡차곡 쌓는 과정(in1의 길이가 더 긴 경우)
 		for(int i = 0; i < y ; i++){
-			for(int n = 0; n < x ; n++)
+			for(int n = 0; n < x ; n++) // mul 배열에 mul_1 과 mul_3 의 곱셈한 값을 저장
 			{mul[m] += (mul_3[i] * mul_1[n]);
 				m++;}
 
@@ -858,8 +859,8 @@ void multiply(){
 
 	point = ((temp1_d + temp3_d)!= 0) ? 1 : 0; //소수점이 있으면 point = 1 , 없으면 point = 0
 
-	if(point){							 //입력 받은 두 수중에 하나라도 소숫점이 있는 경우
-		for(int i = 0 ; i < x+y; i++){      
+	if(point){							 // 입력 받은 두 수 중에 하나라도 소수점이 있는 경우
+		for(int i = 0 ; i < x+y; i++){   // 곱셈의 값이 쌓여있는 mul 배열을 올림수를 고려하여 다시 정리하는 과정
 			if(mul[i] >= 10){
 				mul[i+1] += (mul[i]) / 10;
 				mul[i] = (mul[i]) % 10;
@@ -867,8 +868,8 @@ void multiply(){
 			else{
 				mul[i] = (mul[i]) % 10;}}}
 
-	else{								
-		for(int i = 0; i<x+y-1; i++){
+	else{								// 입력 받은 두 수에 소수점이 없는 경우	
+		for(int i = 0; i<x+y-1; i++){   // 곱셈의 값이 쌓여있는 mul 배열을 올림수를 고려하여 다시 정리하는 과정
 			if(mul[i] >= 10){
 				mul[i+1] += (mul[i]) / 10;
 				mul[i] = (mul[i]) % 10;}
@@ -878,17 +879,10 @@ void multiply(){
 	carry = (mul[x+y-1] != 0 ? 1 : 0);	 // mul배열에 가장 마지막에 올림수가 있으면 carry = 1
 
 
-	for (int i = 0; i <= 49; i++) {		// 소수점(temp1_d) 재조정
-		if (in1[i] == '.')
-		{temp1_d = i+1; break;}}
-	for (int i = 0; i <= 49; i++) {		
-		if (in3[i] == '.')
-		{temp3_d = i+1; break;}}
-
-	if(point){
+	if(point){		
 		p=1;
-		if(carry){	
-			for(int i = 0, c = 0; i < x+y+1 ; i++,c++){ 
+		if(carry){						// 소수점이 있으면서 마지막에 올림수가 있는 경우 last_mul 배열에 점을 넣어 숫자를 문자로 변환하여 저장한다.
+			for(int i = 0, c = 0; i < x+y+1 ; i++,c++){ // 소수점이 있기 때문에 +1 을 넣어 길이를 조정한다.
 				if(i == strlen(in1_s) + strlen(in3_s) ){
 					last_mul[i] = '.'; 
 					c--;}
@@ -896,8 +890,8 @@ void multiply(){
 				else{
 					last_mul[i] = mul[c] + '0';	}}}
 
-		else{
-			for(int i = 0 , c = 0; i<x+y; i++, c++){
+		else{							// 소수점은 있지만 마지막에 올림수가 없는 경우 last_mul 배열에 점을 넣어 숫자를 문자로 변환하여 저장한다.
+			for(int i = 0 , c = 0; i<x+y; i++, c++){ //, 소수점이 없기 때문에 길이를 조정하지 않는다.
 				if(i == strlen(in1_s) + strlen(in3_s) ){
 					last_mul[i] = '.';
 					c--;}
@@ -907,37 +901,37 @@ void multiply(){
 
 	else{
 		p=0;
-		if(carry){
+		if(carry){						// 소수점이 없지만 마지막에 올림수가 있는 경우 last_mul 배열에 소수점 없이 숫자를 문자로 변환하여 그대로 넣어준다.
 			for(int i = 0, c = 0; i< x+y; i++,c++)
 				last_mul[i] = mul[c] + '0';}
 
-		else
+		else							// 소수점도 없고 마지막에 올림수도 없는 경우 last_mul 배열에 소수점 없이 숫자를 문자로 변환하여 그대로 넣어준다.
 			for(int i = 0, c = 0; i<x+y-1; i++,c++)
 				last_mul[i] = mul[c] + '0';}
 
 
 
-	if(point){
+	if(point){							// 소수점이 있는 경우 res_s 와 res_j 배열에 소수부와 정수부를 나눠서 넣어주는 과정
 		for(int i=0, c=0 ; i < strlen(last_mul); i++){
 			if( i < strlen(in1_s) + strlen(in3_s)){
 				res_s[i] = last_mul[c];
 				c++;}
 
 			else{
-				if( c < strlen(last_mul)-1){
+				if( c < strlen(last_mul)-1){ // 소수점이 있기 때문에 -1 을 넣어 길이를 조정한다.
 					res_j[i-(strlen(in1_s)+strlen(in3_s))] = last_mul[c+1];
 					c++;}
 
 				else
 					break;}}}
-	else{
+	else{								// 소수점이 없는 경우 res_S 와 res_j 배열에 소수부와 정수부를 나눠서 넣어주는 과정
 		for(int i=0, c=0; i < strlen(last_mul); i++){
 			if( i < strlen(in1_s) + strlen(in3_s)){
 				res_s[i] = last_mul[c];
 				c++;}
 
 			else{
-				if( c < strlen(last_mul)){
+				if( c < strlen(last_mul)){ // 소수점이 없기 때문에 길이를 조정하지 않는다.
 					res_j[i-(strlen(in1_s)+strlen(in3_s))] = last_mul[c];
 					c++;}
 
@@ -997,18 +991,18 @@ void initialization(){
 void comma(char n[]){
 
 	int t, i;
-	i = (strlen(n) - 1) % 3;
+	i = (strlen(n) - 1) % 3;     // i는 배열 인덱스 값(-> 길이에 -1을 해주는 이유)
 
 	for (t = 0; t <= strlen(n)-1; t++){
 		printf("%c", n[t]);
-		if (t == strlen(n) - 1) break;
-		if (t % 3 == i) printf(",");     }
+		if (t == strlen(n) - 1) break;		// 배열의 끝에서는 ,를 찍지 않음
+		if (t % 3 == i) printf(",");     }	// 3자리마다 , 찍기
 
 } // comma 함수
 
 void VAR(){
 
-	for (int i = 0; var[i] != 0; i++){
+	for (int i = 0; var[i] != 0; i++){		// NULL문자가 들어가기 전까지 반복문
 		for (int u = 0; u <= N; u++)
 			in1[u] = var_var[i][u];
 		separate();
@@ -1020,7 +1014,7 @@ void VAR(){
 			comma(in1_s);}
 		printf("\n");}	
 	
-	if (var[0] == 0){
+	if (var[0] == 0){					// var[0]에 아무것도 들어가있지 않으면 아래의 메시지 출력
 		printf("     정의된 변수 없음");
 	}
 	return;
@@ -1030,41 +1024,41 @@ void VAR(){
 
 void var_in(){
 
-	if (str_in1 == 1) 						{
-		if (in1[0] >= 'A' && in1[0] <= 'Z')		{ 
+	if (str_in1 == 1) 						{				// in1에 입력받은 수가 한자리라면
+		if (in1[0] >= 'A' && in1[0] <= 'Z')		{ 			// in1에 대문자 들어갈 때
 			if (in2[0] == '=')  {
-				var[var_num] = in1[0];
+				var[var_num] = in1[0];						// 변수 저장 배열에 변수 이름 넣기
 				for (int i = 0; i <= 60; i++)
-					var_var[var_num][i] = in3[i];
+					var_var[var_num][i] = in3[i];			// 변수에 입력값 저장
 				for (int u = 0; u <= N; u++)
-					in1[u] = var_var[var_num][u];
+					in1[u] = var_var[var_num][u];			// in1 배열에 저장받은 변수 값 넣기 (저장한 값을 출력하기 위함)
 				separate();
 				p = strlen(in1_s);
 				printf("        = ");
 				comma(in1_j);
-				if (p != 0)
-				{printf(".");
+				if (p != 0)									// in1 소수 자리수가 있으면
+				{printf(".");								// '.' 찍기
 					comma(in1_s);}
 
 				var_num++; chosen = 1;
 				return ;			}					}
 
-		else if (in1[0] >= 'a' && in1[0] <= 'z')  {
+		else if (in1[0] >= 'a' && in1[0] <= 'z')  {			// in1에 소문자 들어갈 때
 			if (in2[0] == '=')   {
-				var[var_num] = in1[0] - 32;
+				var[var_num] = in1[0] - 32;					// 대소문자 구별 안 함. 변수 저장 배열에 변수 이름 넣기
 				for (int i = 0; i <= 60; i++)
-					var_var[var_num][i] = in3[i];
+					var_var[var_num][i] = in3[i];			// 변수에 입력값 저장
 				for (int u = 0; u <= N; u++)
-					in1[u] = var_var[var_num][u];
+					in1[u] = var_var[var_num][u];			// in1 배열에 저장했던 변수값 넣기 (저장한 값 출력하기 위함)
 				separate();
 				p = strlen(in1_s);
 				printf("        = ");
-				comma(in1_j);
-				if (p != 0)
-				{printf(".");
+				comma(in1_j);								// 세자리마다 , 실행
+				if (p != 0)									// in1에 소수 자리수가 있으면
+				{printf(".");								// '.' 찍기
 					comma(in1_s);}
 
-				var_num++; chosen = 1;
+				var_num++; chosen = 1;						// main 함수 start 부분부터 다시 시작
 				return ;			}					  }}
 
 } // var_in 함수
@@ -1076,18 +1070,18 @@ void save()
 	FILE *out2;
 	FILE *out3;
 
-	out3 = fopen("save_var_num", "w+");
-	fprintf(out3, "%d", var_num); 
+	out3 = fopen("save_var_num", "w+");			// save_var_num 파일을 열어 쓰겠다. 그 과정을 out3라 하겠다.
+	fprintf(out3, "%d", var_num); 				// out3를 실행해 var_num 숫자를 출력하게 하겠다. > var_num은 저장된 변수의 수를 의미한다.
 	fclose(out3);
 
-	out1 = fopen("save_var", "w+");
+	out1 = fopen("save_var", "w+");				// save_var 파일을 열어 쓰겠다. 이 과정을 ou1이라고 하겠다.
 
 	for (int i = 0; i <= 9; i++)
 	{
 		if (var[i] != 0)
 		{
-			fprintf(out1, "%c", var[i]);
-			check[var[i]-65] = 1;
+			fprintf(out1, "%c", var[i]);		//이 때 fprint되는 값은 변수의 이름이다. ex) A, B, C
+	//		check[var[i]-65] = 1;
 		}
 		else break;
 	}
@@ -1099,7 +1093,7 @@ void save()
 	{
 		if (strlen(var_var[i]) != 0)
 		{
-			fprintf(out2, "%s\n", var_var[i]);	
+			fprintf(out2, "%s\n", var_var[i]);	 //이 때 fprint 되는 값은 변수의 해당 수 문자열이다.
 		}
 		else break;
 	}
@@ -1117,7 +1111,7 @@ void load()
 	FILE *in2;
 	FILE *in3;
 
-	in3 = fopen("save_var_num", "r");
+	in3 = fopen("save_var_num", "r");			// save_var_num 파일에서 저장된 var_num값을 읽어 cnt 변수에 저장한다.
 	fscanf(in3, "%d", &cnt);
 	fclose(in3);
 
@@ -1128,7 +1122,7 @@ void load()
 		if (u == 10) { fclose(in1); return ; }
 		else
 		{
-			fscanf(in1, "%c", &var[u]);
+			fscanf(in1, "%c", &var[u]);			// cnt 수만큼 var_num에서 변수를 읽어 var배열에 저장한다.
 		}
 	}
 
@@ -1141,7 +1135,7 @@ void load()
 		if (u == 10) { fclose(in2); return ; }
 		else
 		{
-			fscanf(in2, "%s", var_var[u]);
+			fscanf(in2, "%s", var_var[u]);		// cnt 수만큼 변수에 해당하는 문자열을 var_var배열에 저장한다.
 		}
 	}
 	var_num = u;
@@ -1249,6 +1243,7 @@ void quo_arrange()   // 몫 배열의 값들을 자릿수에 맞게 정리해주
 		else
 			quo_s = quo_max;
 	}
+	res_j[0] = '0';
 
 	if (quo_s != quo_max)
 	{
@@ -1269,6 +1264,7 @@ void quo_arrange()   // 몫 배열의 값들을 자릿수에 맞게 정리해주
 		res_s[quo_swap_val] = quo[quo_max];
 	}
 
+	res_s[9] = 0;
 
 
 	for (int i = 8; i >= 0; i--) {
@@ -1284,6 +1280,8 @@ void quo_arrange()   // 몫 배열의 값들을 자릿수에 맞게 정리해주
 			for (int i = 0; i <= temp_s; i++)
 				res_s[i] += '0';}}
 
+	for (int i = 0; i <= 10; i++)
+		printf("%d", res_s[i]);
 	p = strlen(res_s);
 	
 }
@@ -1439,7 +1437,7 @@ void error(){
 	for(int i = 0; i < strlen(begin);  i++){
 		if((begin[i] >= '0' && begin[i] <= '9') || (begin[i] >= 'a' && begin[i] <= 'z') || (begin[i] >= 'A' && begin[i] <= 'Z') || (begin[i] == '+') || (begin[i] == '-') || (begin[i] == '*') || (begin[i] == '/') || (begin[i] == '%') || (begin[i] == '.') || (begin[i] == '=') ||(begin[i] == 32) || (begin[i] == 10)) {}
 
-		else{
+		else{													// begin에서 받을만한 것 외의 이상한 문자가 들어갔을 때 error 출력
 			printf("     = error");
 			again = 1;
 			return;
@@ -1458,7 +1456,7 @@ void error(){
 		if(strcmp(in3,"VAR") == 0){
 			printf("    = error"); again = 1; return;}
 		if(strcmp(in3,"clear") == 0){
-			printf("    = error"); again = 1; return;}						// in1이 in2 in3로 계속 이어졌을 때 save, clear가 in1에 들어가있으면 error 뜨게 하는 것도 해야함
+			printf("    = error"); again = 1; return;}						// in1이 in2 in3로 계속 이어졌을 때 save, clear가 in1에 들어가있으면 error 뜨게 하는 것도 같은 원리
 
 		/*		for( int i = 0 ; i <= 9 ; i++ ){
 				if(strcmp(in1,var[i]) == 0){
@@ -1472,7 +1470,7 @@ void error(){
 void which_sign()
 {
 
-		if(in2[0] == '-'){
+		if(in2[0] == '-'){						// - 단항, - 이항 수행
 			if(minus_sign_count == 0)
 				in2[0] = '-';
 			else if(minus_sign_count == 1){
@@ -1485,7 +1483,7 @@ void which_sign()
 				in2[0] = '-';}}
 
 
-		else if(in2[0] == '+'){
+		else if(in2[0] == '+'){					// + 단항, + 이항 수행
 			if(minus_sign_count == 0)
 				in2[0] = '+';
 			else if(minus_sign_count == 1){
@@ -1498,7 +1496,7 @@ void which_sign()
 				when_put_minus=1;}}
 
 
-		else if(in2[0] == '*'){
+		else if(in2[0] == '*'){					// * 단항, * 이항 수행
 			if(minus_sign_count == 0 || minus_sign_count == 2)
 				in2[0] = '*';
 			else if(minus_sign_count == 1){
@@ -1512,7 +1510,7 @@ void which_sign()
 				in2[0] = '/';	
 				when_put_minus=1;}}
 
-		else if(in2[0] == '%'){
+		else if(in2[0] == '%'){					// % 단항, % 이항 수행
 			if(minus_sign_count == 0 || minus_sign_count == 2){
 				if(if_minus_first == 1){
 					in2[0] = '%';
